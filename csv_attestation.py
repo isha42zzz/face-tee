@@ -376,7 +376,7 @@ class AttestationReportVerifier():
 
         return True
 
-    def parse_attestation_report(self):
+    def parse_attestation_report(self, return_dict=False):
         parsed_report = {}
 
         parsed_report['PUBKEY_DIGEST'] = self.real_report[0:0x20].hex()
@@ -403,9 +403,11 @@ class AttestationReportVerifier():
             policy_str += data + ' || '
         parsed_report['POLICY'] = policy_str + 'API_MINOR-0x%x' % ((raw_policy >> 32) & 0xff)
 
-        print("****Verified Attestation Report****")
-        print(json.dumps(parsed_report, indent=4))
-        return
+        if not return_dict:
+            print("****Verified Attestation Report****")
+            print(json.dumps(parsed_report, indent=4))
+        
+        return parsed_report if return_dict else None
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Utility for Hygon China Secure Virtualization (CSV) remote attestation, " \
