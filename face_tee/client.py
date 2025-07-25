@@ -32,7 +32,7 @@ def client_auth_check(server_url: str):
     pubkey_digest_calc = hashes.Hash(hashes.SHA256(), backend=default_backend())
     pubkey_digest_calc.update(pubkey_pem)
     calc_digest = pubkey_digest_calc.finalize().hex()
-    if not userdata_hex or not calc_digest in userdata_hex:
+    if not userdata_hex or calc_digest.encode('utf-8').hex() != userdata_hex:
         print("认证报告中的userdata与公钥摘要不匹配，服务器不可信！")
         os.remove("temp_report")
         return None
